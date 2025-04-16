@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>JS-CALENDAR-NOM-PRENOM</title>
+  <style>
+    /* Style global en Dark Mode */
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 20px;
+    }
+    
+    h1, h3 {
+      text-align: center;
+      margin: 0 0 20px 0;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+    
+    h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+    
+    /* Style du tableau */
+    table {
+      border-collapse: collapse;
+      margin: auto;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    
+    td {
+      border: 1px solid #444;
+      padding: 10px 15px;
+      text-align: center;
+    }
+    
+    td.today {
+      background-color: #ff1744;
+      color: #fff;
+      font-weight: bold;
+    }
+    
+    /* Style du conteneur de chaque calendrier */
+    .calendar-container {
+      display: inline-block;
+      vertical-align: top;
+      margin: 10px;
+      background-color: #1e1e1e;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+      min-width: 280px;
+    }
+    
+    /* Style du textarea en mode debug */
+    textarea {
+      width: 100%;
+      height: 300px;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      border: 1px solid #444;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Calendrier JS - Moussi Lucas</h1>
+  <div id="calendars">
+    <script type="application/javascript">
+      // Option pour activer/désactiver le mode debug (affichage du code HTML généré)
+      let debug_mode = false;
+      let generatedHTML = "";
+
+      // Fonction qui génère le calendrier d'un mois donné.
+      // Le paramètre month_index correspond au numéro du mois (0 = Janvier, etc.)
+      function print_table_month(max_days, month_index) {
+        let today = new Date();
+        let current_month = today.getMonth();
+        let current_day = today.getDate();
+
+        const month_names = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet",
+                             "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+
+        let html = "<div class='calendar-container'>";
+        html += "<h3>" + month_names[month_index] + "</h3>";
+        html += "<table>";
+        const days_per_row = 7;
+        let day = 1;
+
+        // Créer les lignes du tableau jusqu'à épuisement des jours
+        while (day <= max_days) {
+          html += "<tr>";
+          for (let i = 0; i < days_per_row; i++) {
+            if (day > max_days) {
+              break;
+            }
+            if (month_index === current_month && day === current_day) {
+              html += "<td class='today'>" + day + "</td>";
+            } else {
+              html += "<td>" + day + "</td>";
+            }
+            day++;
+          }
+          html += "</tr>";
+        }
+        html += "</table>";
+        html += "</div>";
+
+        if (debug_mode) {
+          generatedHTML += html;
+        } else {
+          document.write(html);
+        }
+      }
+
+      // Exemple : Afficher le calendrier pour Janvier
+      print_table_month(31, 0);
+
+      // Fonction pour générer les calendriers pour tous les mois de l'année
+      function generateYearCalendar() {
+        let month_max_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        for (let i = 0; i < month_max_days.length; i++) {
+          print_table_month(month_max_days[i], i);
+        }
+      }
+      
+      // Générer tous les calendriers mensuels
+      generateYearCalendar();
+
+      // Bonus : Si debug_mode est activé, afficher le code HTML généré dans un textarea
+      if (debug_mode) {
+        document.write("<h2>Code HTML généré</h2>");
+        document.write("<textarea readonly>" + generatedHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</textarea>");
+      }
+    </script>
+  </div>
+</body>
+</html>
